@@ -52,7 +52,7 @@
         <div id="messages"></div>
         <div id="input-container">
             <input type="text" id="message-input" placeholder="Type a message...">
-            <button onclick="sendMessage()">Send</button>
+            <button id="send-button">Send</button>
         </div>
     </div>
 
@@ -88,16 +88,22 @@
         });
 
         // Send message
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+
         function sendMessage() {
             const input = document.getElementById('message-input');
             if (input.value.trim() !== '') {
                 messagesRef.add({
                     text: input.value,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    input.value = '';
+                }).catch(error => {
+                    console.error("Error adding message: ", error);
                 });
-                input.value = '';
             }
         }
     </script>
 </body>
 </html>
+
